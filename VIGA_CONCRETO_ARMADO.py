@@ -20,6 +20,53 @@ import numpy as np
 ################################################################################
 # BIBLIOTECAS DESENVOLVEDORES GPEE
 
+def MODULO_ELASTICIDADE_CONCRETO(AGREGADO, F_CK, F_CKJ):
+    """
+    Esta função calcula os módulos de elasticidade do concreto.  
+
+    Entrada:
+    AGREGADO    | Tipo de agragado usado no traço do cimento       |        | string    
+                |   'BAS' - Agregado de Basalto                    |        | 
+                |   'GRA' - Agregado de Granito                    |        |              
+                |   'CAL' - Agregado de Calcário                   |        |
+                |   'ARE' - Agregado de Arenito                    |        | 
+    F_CK        | Resistência característica à compressão          | kN/m²  | float   
+    F_CKJ       | Resistência característica à compressão idade J  | kN/m²  | float
+    
+    Saída:
+    E_CIJ       | Módulo de elasticidade tangente                  | kN/m²  | float
+    E_CSJ       | Módulo de elasticidade do secante                | kN/m²  | float   
+    """
+    # Determinação do módulo tangente E_CI idade T
+    if AGREGADO == 'BAS':         
+        ALFA_E = 1.2
+    elif AGREGADO == 'GRA':         
+        ALFA_E = 1.0
+    elif AGREGADO == 'CAL':       
+        ALFA_E = 0.9
+    elif AGREGADO == 'ARE':       
+        ALFA_E = 0.7
+    F_CK /= 1E3
+    if F_CK <= 50:        
+        E_CI = ALFA_E * 5600 * np.sqrt(F_CK)
+    elif F_CK > 50:   
+        E_CI = 21.5 * (10 ** 3) * ALFA_E * (F_CK / 10 + 1.25) ** (1 / 3)
+    ALFA_I = 0.8 + 0.2 * F_CK / 80
+    if ALFA_I > 1:        
+        ALFA_I = 1
+    # Determinação do módulo secante E_CS idade T
+    E_CS = E_CI * ALFA_I
+    if F_CK <= 45 :
+        F_CK *= 1E3
+        E_CIJ = E_CI * (F_CKJ / F_CK) ** 0.5  
+    elif  F_CK > 45 : 
+        F_CK *= 1E3
+        E_CIJ = E_CI * (F_CKJ / F_CK) ** 0.3  
+    E_CSJ = E_CIJ * ALFA_I
+    E_CIJ *= 1E3 
+    E_CSJ *= 1E3 
+    return E_CIJ, E_CSJ
+    
 def MOMENTO_RESISTENE_MRD(B_W, D, A_S, F_Y, F_CK, GAMMA_M_ACO, GAMMA_M_CONCRETO):
     """
     Esta função determina o momento resistente M_RD de uma viga de concreto armado.

@@ -3,7 +3,7 @@
 # WANDERLEI MALAQUIAS PEREIRA JUNIOR,                 ENG. CIVIL / PROF. (UFCAT)
 # ANDRÉ TEÓFILO BECK,                                   ENG. MEC. / PROF. (EESC)
 # DANIEL LIMA ARAÚJO,                                   ENG. CIVIL / PROF. (UFG)
-# MAURO SOUSA,                                         ENG. CIVIL / PROF. (UFPA)
+# MAURO ALEXANDRE PAULA DE SOUSA,                      ENG. CIVIL / PROF. (UFPA)
 # MATHEUS HENRIQUE MORATO DE MORAES,                          ENG. CIVIL (UFCAT)
 ################################################################################
 
@@ -34,11 +34,15 @@ def AREA_SAPATA(N_GK, N_QK, N_SPT, COTA_SAPATA, A_P, B_P):
    	# Carga de projeto
     N_SK = 1.10 * N_GK + N_QK
     # Área da sapata
-    B = 1
-    SIGMA_SOLOADM = TENSAO_ADMISSIVEL(N_SPT, COTA_SAPATA, B)
-    A = (N_SK / SIGMA_SOLO) / B
-	A_SAPATA = A * B
-    return A_SAPATA
+    B = np.linspace(0.60, 1.00, 1000)
+    for B in range():
+        SIGMA_SOLOADM, N_SPTMEDIO = TENSAO_ADMISSIVEL(N_SPT, COTA_SAPATA, B)
+        A = B - B_P + A_P
+        A_SAPATA = A * B
+        SIGMA_REAL = N_SK / A_SAPATA
+        ERRO = SIGMA_REAL / SIGMA_SOLO
+	
+    return A_SAPATA, A, B, N_SPTMEDIO
 
 def TENSAO_ADMISSIVEL(N_SPT, COTA_SAPATA, B):
 	"""
@@ -64,8 +68,9 @@ def TENSAO_ADMISSIVEL(N_SPT, COTA_SAPATA, B):
 	N_SPTBULBO = []
 	for K_CONT, VALOR_NSPT in enumerate(PROFUNDIDADES):
 	    N_SPTBULBO.append(N_SPT[VALOR_NSPT])
-	SIGMA_ADM = np.mean(N_SPTBULBO) / 0.05
-	return SIGMA_ADM
+	N_SPTMEDIO = np.mean(N_SPTBULBO)
+    SIGMA_ADM = N_SPTMEDIO / 0.05
+	return SIGMA_ADM, N_SPTMEDIO
 
 def CALCULO_KV(TIPO_SOLO, NSPT, N_GK, N_QK):
     """
@@ -89,7 +94,6 @@ def CALCULO_KV(TIPO_SOLO, NSPT, N_GK, N_QK):
     # Calculo deformabilidade do solo Es
 
     # Es = alfa * k * nspt 
-
   
     carga_pilar = SOLO["CARGA_PILAR"] 
     base_pilar = SOLO["BASE_PILAR"] 
@@ -109,7 +113,7 @@ def CALCULO_KV(TIPO_SOLO, NSPT, N_GK, N_QK):
     # Módulo de elasticidade do solo
     ALPHA = DADO_SOLO['alfa']
     K = DADO_SOLO['k(kPa)']
-    N = DADO_SOLO['n']
+
     E_SOLO = float(ALPHA) * float(K) * float(N)
     # Tensão no solo
     B = 1
