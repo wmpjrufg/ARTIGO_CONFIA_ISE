@@ -1,0 +1,20 @@
+> best
+Goodness-of-fit statistics
+                               1-mle-norm    2-mle-exp 3-mle-gamma  4-mle-lnorm 5-mle-weibull  6-mle-logis 7-mle-gumbel
+Kolmogorov-Smirnov statistic    0.1403764 4.086323e-01    0.103371   0.08603259     0.1497506 7.238257e-02   0.07225582
+Cramer-von Mises statistic    602.8066575 7.213302e+03  269.243513 169.83418316   761.8232016 1.933169e+02 120.73245322
+Anderson-Darling statistic   3295.0787970 3.434126e+04 1444.036221 914.29826057  4321.1604099 1.735952e+03 671.26969676
+
+Goodness-of-fit criteria
+                               1-mle-norm 2-mle-exp 3-mle-gamma 4-mle-lnorm 5-mle-weibull 6-mle-logis 7-mle-gumbel
+Akaike's Information Criterion   741094.0  964843.0    718980.4    713200.4      749717.6    728070.2     710887.2
+Bayesian Information Criterion   741113.6  964852.8    719000.0    713220.0      749737.2    728089.8     710906.8
+
+
+> summary(d.lnorm)
+Fitting of the distribution ' lnorm ' by maximum likelihood 
+Parameters : 
+         estimate   Std. Error
+meanlog 2.5783766 0.0007273709
+sdlog   0.2657214 0.0005142961
+Loglikelihood:  -356598.2   AIC:  713200.4   BIC:  713220 
